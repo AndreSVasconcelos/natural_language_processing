@@ -5,6 +5,7 @@ import nltk
 import spacy
 from spacy.matcher import PhraseMatcher
 from IPython.core.display import HTML
+from spacy import displacy
 
 # Carregamento e limpeza de um texto de uma url
 dados = urllib.request.urlopen('https://pt.wikipedia.org/wiki/Harmonia_(m%C3%BAsica)')
@@ -39,3 +40,9 @@ for i in matches:
     texto += str(f"...{doc[inicio:i[2] + numero_palavras]}...").replace(string, string.upper())
     texto += '\n\n'
 print(texto)
+
+# Extração de entidades nomeadas
+for entidades in doc.ents:
+    print(entidades.text, entidades.label_)
+
+displacy.render(doc, style='ent')
