@@ -4,8 +4,12 @@ import urllib.request
 import nltk
 import spacy
 from spacy.matcher import PhraseMatcher
+from spacy.lang.pt.stop_words import STOP_WORDS
 from IPython.core.display import HTML
 from spacy import displacy
+from matplotlib.colors import ListedColormap
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 # Carregamento e limpeza de um texto de uma url
 dados = urllib.request.urlopen('https://pt.wikipedia.org/wiki/Harmonia_(m%C3%BAsica)')
@@ -46,3 +50,25 @@ for entidades in doc.ents:
     print(entidades.text, entidades.label_)
 
 displacy.render(doc, style='ent')
+
+# Nuvem de palavras e stop words
+color_map = ListedColormap(['orange', 'green', 'red', 'magenta'])
+cloud = WordCloud(background_color='white', max_words=50, colormap=color_map)
+cloud = cloud.generate(conteudo)
+plt.figure(figsize=(10, 10))
+plt.imshow(cloud)
+plt.axis('off')
+#plt.show()
+# Remover stop words (preposições, conjunção, etc)
+lista_token = []
+for token in doc:
+    if token.is_stop == False:
+        lista_token.append(token.text)
+cloud = cloud.generate(' '.join(lista_token))
+plt.figure(figsize=(10, 10))
+plt.imshow(cloud)
+plt.axis('off')
+plt.show()
+
+
+
